@@ -16,7 +16,7 @@ module.exports.SignUp = async (req, res) => {
             if (err) {
                 return next(err);
             }
-            req.flash("success", "LogOut Successfull!");
+            req.flash("success", "LogIn Successfull!");
             res.redirect("/listings");
         });
     } catch (error) {
