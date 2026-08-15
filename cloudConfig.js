@@ -13,7 +13,7 @@ const storage = new CloudinaryStorage({
         folder: 'wanderlust_DEV',
         allowedFormats: ["png", "jpg", "jpeg"],
         public_id: (req, file) => {
-            let fileName = file.originalname.split('.')[0]; // Removes the extension
+            let fileName = file.originalname.split('.')[0];
             return `${fileName}-${Date.now()}`;
         }
     },
