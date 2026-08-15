@@ -48,20 +48,6 @@
 
 ---
 
-## 📸 Screenshots
-
-> *Add your screenshots here*
-
-| Home Page | Listing Detail | Create Listing |
-|:---------:|:-------------:|:--------------:|
-| ![Home](screenshots/home.png) | ![Detail](screenshots/detail.png) | ![Create](screenshots/create.png) |
-
-| User Dashboard | Map View | Categories |
-|:-------------:|:--------:|:----------:|
-| ![Dashboard](screenshots/dashboard.png) | ![Map](screenshots/map.png) | ![Categories](screenshots/categories.png) |
-
----
-
 ## 🚀 Getting Started
 
 ### Prerequisites
