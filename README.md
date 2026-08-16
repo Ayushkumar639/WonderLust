@@ -28,6 +28,8 @@
 - **Image Uploads** - Cloudinary integration with Multer for image storage
 - **Geolocation** - Mapbox-powered interactive maps with coordinates
 - **Owner Association** - Listings linked to authenticated users
+- **Advanced Search** - Real-time search with clear functionality, preserves category filters
+- **Category Filter Pills** - Horizontal scrollable filter chips with "All" option, active states, hover/touch feedback
 
 ### ⭐ Reviews & Ratings
 - **Review System** - Users can leave comments and 1-5 star ratings
@@ -39,6 +41,7 @@
 - **Responsive Design** - Mobile-friendly UI components
 - **Partial Includes** - Reusable header, footer, navbar components
 - **Form Validation** - Client and server-side validation
+- **Modern Search & Filter UI** - Prominent search card, pill-style category filters, smooth animations
 
 ### 🛠️ Developer Experience
 - **Async Error Handling** - wrapAsync utility for clean route handlers
