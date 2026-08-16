@@ -2,193 +2,544 @@
 
     <body>
         <style>
-            #filters {
+            /* ===== SEARCH BAR ===== */
+            .search-section {
+                padding: 1.5rem 0;
+            }
+            
+            .search-card {
+                background: white;
+                border-radius: 16px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                padding: 1.25rem;
+                border: 1px solid #f0f0f0;
+                transition: box-shadow 0.2s ease, border-color 0.2s ease;
+            }
+            
+            .search-card:focus-within {
+                box-shadow: 0 8px 30px rgba(254, 66, 77, 0.15);
+                border-color: #fe424d;
+            }
+            
+            .search-input-wrapper {
+                position: relative;
                 display: flex;
-                flex-wrap: wrap;
                 align-items: center;
-                justify-content: center;
+            }
+            
+            .search-input-wrapper .search-icon {
+                position: absolute;
+                left: 1rem;
+                color: #999;
+                font-size: 1.1rem;
+                pointer-events: none;
+                transition: color 0.2s ease;
+            }
+            
+            .search-card:focus-within .search-icon {
+                color: #fe424d;
+            }
+            
+            .search-input {
+                width: 100%;
+                border: none;
+                background: #f8f9fa;
+                border-radius: 12px;
+                padding: 0.875rem 1rem 0.875rem 3rem;
+                font-size: 1rem;
+                font-family: inherit;
+                color: #222;
+                transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            }
+            
+            .search-input:focus {
+                outline: none;
+                background: white;
+                box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.15);
+            }
+            
+            .search-input::placeholder {
+                color: #aaa;
+            }
+            
+            .search-clear {
+                position: absolute;
+                right: 1rem;
+                background: none;
+                border: none;
+                color: #999;
+                font-size: 1rem;
+                cursor: pointer;
+                padding: 0.25rem;
+                display: none;
+                transition: color 0.2s ease;
+            }
+            
+            .search-clear:hover {
+                color: #fe424d;
+            }
+            
+            .search-clear.visible {
+                display: block;
+            }
+            
+            .search-submit {
+                display: none; /* Hidden, form submits on Enter */
+            }
+            
+            .search-hint {
+                margin-top: 0.75rem;
+                font-size: 0.8rem;
+                color: #888;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+            
+            .search-hint kbd {
+                background: #f0f0f0;
+                border-radius: 4px;
+                padding: 0.125rem 0.375rem;
+                font-size: 0.7rem;
+                font-family: inherit;
+                color: #666;
+            }
+            
+            /* ===== CATEGORY FILTERS ===== */
+            .filters-section {
+                padding-bottom: 1rem;
+            }
+            
+            .filters-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 0.75rem;
+                flex-wrap: wrap;
                 gap: 0.5rem;
             }
-
-            .filter {
-                text-align: center;
-                margin-top: 1rem;
-                opacity: 0.7;
-                text-decoration: none;
-                color: inherit;
-                min-width: 70px;
-            }
-
-            .filter:hover {
-                opacity: 1;
-                cursor: pointer;
-            }
-
-            .filter.active {
-                opacity: 1;
-                border-bottom: 3px solid #fe424d;
-                padding-bottom: 0.5rem;
-            }
-
-            .filter.active p {
-                color: #fe424d;
+            
+            .filters-title {
+                font-size: 0.85rem;
                 font-weight: 600;
+                color: #666;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
-
-            .filter.active i {
+            
+            .filters-count {
+                font-size: 0.75rem;
+                color: #999;
+            }
+            
+            .filters-scroll {
+                display: flex;
+                gap: 0.5rem;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                padding: 0.25rem 0.25rem 0.5rem;
+                margin: 0 -0.25rem;
+                scrollbar-width: thin;
+                scrollbar-color: #fe424d transparent;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .filters-scroll::-webkit-scrollbar {
+                height: 6px;
+            }
+            
+            .filters-scroll::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            
+            .filters-scroll::-webkit-scrollbar-thumb {
+                background: #fe424d;
+                border-radius: 3px;
+            }
+            
+            .filter-pill {
+                flex: 0 0 auto;
+                scroll-snap-align: start;
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.375rem;
+                padding: 0.75rem 1rem;
+                border-radius: 50px;
+                background: #f8f9fa;
+                border: 1px solid #eee;
+                text-decoration: none;
+                color: #444;
+                font-size: 0.8rem;
+                font-weight: 500;
+                white-space: nowrap;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                cursor: pointer;
+                min-width: 80px;
+            }
+            
+            .filter-pill:hover {
+                background: #fff0f0;
+                border-color: #fe424d;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(254, 66, 77, 0.15);
                 color: #fe424d;
             }
-
-            .filter p {
-                font-size: 0.75rem;
-                margin: 0;
-                white-space: nowrap;
+            
+            .filter-pill:active {
+                transform: translateY(0) scale(0.98);
             }
-
-            .filter i {
-                font-size: 1.25rem;
-                display: block;
-                margin-bottom: 0.25rem;
+            
+            .filter-pill.active {
+                background: #fe424d;
+                border-color: #fe424d;
+                color: white;
+                box-shadow: 0 4px 16px rgba(254, 66, 77, 0.3);
             }
-
-            .tax-info {
-                display: none;
+            
+            .filter-pill.active:hover {
+                background: #e83a45;
+                border-color: #e83a45;
+                color: white;
+                transform: translateY(-2px);
             }
-
-            .tax-toggle {
-                border: 1px solid #ddd;
-                border-radius: 1rem;
-                padding: 0.75rem 1rem;
-                margin-top: 1rem;
+            
+            .filter-pill.active .filter-icon {
+                color: white;
+            }
+            
+            .filter-icon {
+                font-size: 1.15rem;
+                color: #fe424d;
+                transition: color 0.2s ease;
                 display: flex;
                 align-items: center;
-                background-color: white;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                justify-content: center;
             }
-
-            .tax-toggle .form-check-label {
-                margin: 0;
-                font-size: 0.9rem;
+            
+            .filter-pill:hover .filter-icon,
+            .filter-pill:focus .filter-icon {
+                color: #fe424d;
+            }
+            
+            .filter-label {
+                font-size: 0.75rem;
+                line-height: 1.2;
+            }
+            
+            /* Scroll fade edges */
+            .filters-container {
+                position: relative;
+            }
+            
+            .filters-container::before,
+            .filters-container::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 24px;
+                pointer-events: none;
+                z-index: 1;
+            }
+            
+            .filters-container::before {
+                left: 0;
+                background: linear-gradient(to right, white, transparent);
+            }
+            
+            .filters-container::after {
+                right: 0;
+                background: linear-gradient(to left, white, transparent);
+            }
+            
+            /* Hide fade edges when not scrollable */
+            .filters-container.no-scroll::before,
+            .filters-container.no-scroll::after {
+                display: none;
+            }
+            
+            /* ===== TAX TOGGLE ===== */
+            .tax-toggle {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 0.75rem 1rem;
+                background: #f8f9fa;
+                border-radius: 12px;
+                border: 1px solid #eee;
+                font-size: 0.85rem;
+                color: #444;
+            }
+            
+            .tax-toggle .form-check-input {
+                width: 1.1rem;
+                height: 1.1rem;
+                border-color: #ddd;
                 cursor: pointer;
             }
             
+            .tax-toggle .form-check-input:checked {
+                background-color: #fe424d;
+                border-color: #fe424d;
+            }
+            
+            .tax-toggle .form-check-input:focus {
+                box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.2);
+            }
+            
+            .tax-toggle .form-check-label {
+                margin: 0;
+                cursor: pointer;
+                font-weight: 500;
+            }
+            
+            /* ===== RESPONSIVE ===== */
+            @media (max-width: 992px) {
+                .search-section {
+                    padding: 1rem 0;
+                }
+                
+                .search-card {
+                    padding: 1rem;
+                }
+                
+                .search-input {
+                    padding: 0.875rem 1rem 0.875rem 2.75rem;
+                }
+            }
+            
             @media (max-width: 768px) {
-                #filters {
-                    padding: 0 0.5rem;
+                .search-section {
+                    padding: 1rem 0.5rem;
                 }
                 
-                .filter {
-                    min-width: 60px;
-                    margin-top: 0.5rem;
+                .search-card {
+                    padding: 1rem;
+                    border-radius: 12px;
                 }
                 
-                .filter p {
-                    font-size: 0.65rem;
+                .search-input {
+                    padding: 1rem 1rem 1rem 2.75rem;
+                    font-size: 1rem; /* Prevents zoom on iOS */
                 }
                 
-                .filter i {
+                .search-icon {
+                    left: 0.875rem !important;
                     font-size: 1.1rem;
                 }
                 
+                .filters-section {
+                    padding-bottom: 0.75rem;
+                }
+                
+                .filters-scroll {
+                    gap: 0.375rem;
+                    padding: 0.25rem 0.5rem 0.5rem;
+                }
+                
+                .filter-pill {
+                    padding: 0.625rem 0.875rem;
+                    min-width: 72px;
+                    border-radius: 40px;
+                }
+                
+                .filter-icon {
+                    font-size: 1.1rem;
+                }
+                
+                .filter-label {
+                    font-size: 0.7rem;
+                }
+                
                 .tax-toggle {
-                    width: 100%;
-                    justify-content: center;
-                    margin-top: 0.5rem;
+                    padding: 0.625rem 0.875rem;
+                    font-size: 0.8rem;
+                }
+                
+                .filters-container::before,
+                .filters-container::after {
+                    width: 16px;
                 }
             }
             
             @media (max-width: 576px) {
-                .filter {
-                    min-width: 55px;
+                .search-section {
+                    padding: 0.75rem 0.375rem;
                 }
                 
-                .filter p {
-                    display: none;
+                .search-card {
+                    padding: 0.875rem;
                 }
                 
-                .filter i {
-                    font-size: 1.25rem;
+                .search-input {
+                    padding: 0.875rem 0.875rem 0.875rem 2.5rem;
                 }
                 
-                .tax-toggle .form-check-label {
-                    font-size: 0.8rem;
+                .search-icon {
+                    left: 0.75rem !important;
+                }
+                
+                .search-clear {
+                    right: 0.75rem;
+                }
+                
+                .search-hint {
+                    display: none; /* Hide hint on very small screens */
+                }
+                
+                .filters-scroll {
+                    gap: 0.3rem;
+                }
+                
+                .filter-pill {
+                    padding: 0.5rem 0.75rem;
+                    min-width: 64px;
+                }
+                
+                .filter-icon {
+                    font-size: 1.05rem;
+                }
+                
+                .filter-label {
+                    font-size: 0.65rem;
+                }
+                
+                .filters-title {
+                    font-size: 0.75rem;
                 }
             }
+            
+            /* Large screens - wider search */
+            @media (min-width: 1200px) {
+                .search-card {
+                    max-width: 900px;
+                    margin: 0 auto;
+                }
+            }
+            
+            .tax-info {
+                display: none;
+            }
         </style>
-        <div id="filters">
-            <a href="/listings?category=Trending<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Trending' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-solid fa-fire"></i>
-                </div>
-                <p>Trending</p>
-            </a>
-            <a href="/listings?category=Rooms<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Rooms' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-solid fa-bed"></i>
-                </div>
-                <p>Rooms</p>
-            </a>
-            <a href="/listings?category=Iconic Cities<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Iconic Cities' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-solid fa-mountain-city"></i>
-                </div>
-                <p>Iconic Cities</p>
-            </a>
-            <a href="/listings?category=Mountains<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Mountains' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-solid fa-mountain"></i>
-                </div>
-                <p>Mountains</p>
-            </a>
-            <a href="/listings?category=Castels<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Castels' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-brands fa-fort-awesome"></i>
-                </div>
-                <p>Castels</p>
-            </a>
-            <a href="/listings?category=Amazing Pools<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Amazing Pools' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-solid fa-person-swimming"></i>
-                </div>
-                <p>Amazing Pools</p>
-            </a>
-            <a href="/listings?category=Camping<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Camping' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-solid fa-campground"></i>
-                </div>
-                <p>Camping</p>
-            </a>
-            <a href="/listings?category=Farms<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Farms' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-solid fa-cow"></i>
-                </div>
-                <p>Farms</p>
-            </a>
-            <a href="/listings?category=Archetic<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Archetic' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-solid fa-snowflake"></i>
-                </div>
-                <p>Archetic</p>
-            </a>
-            <a href="/listings?category=Dome<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Dome' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-solid fa-landmark-dome"></i>
-                </div>
-                <p>Dome</p>
-            </a>
-            <a href="/listings?category=Boats<%= search ? '&search=' + encodeURIComponent(search) : '' %>" class="filter <%= category === 'Boats' ? 'active' : '' %>">
-                <div>
-                    <i class="fa-solid fa-ship"></i>
-                </div>
-                <p>Boats</p>
-            </a>
-            <div class="tax-toggle">
-                <div class="form-check-reverse form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                    <label class="form-check-label" for="switchCheckDefault">Display Total After Taxes</label>
+
+        <!-- SEARCH BAR -->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-card">
+                    <form class="search-form" action="/listings" method="GET" id="searchForm">
+                        <div class="search-input-wrapper">
+                            <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+                            <input 
+                                type="search" 
+                                name="search" 
+                                class="search-input" 
+                                id="searchInput"
+                                placeholder="Search destinations, titles, locations..." 
+                                value="<%= typeof search !== 'undefined' ? search : '' %>"
+                                autocomplete="off"
+                                aria-label="Search destinations"
+                            >
+                            <button type="button" class="search-clear" id="searchClear" aria-label="Clear search">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                            <button type="submit" class="search-submit" aria-hidden="true">Search</button>
+                        </div>
+                        <% if (typeof category !== 'undefined' && category) { %>
+                            <input type="hidden" name="category" value="<%= category %>" />
+                        <% } %>
+                    </form>
+                    <div class="search-hint" id="searchHint">
+                        <kbd>Enter</kbd> to search &nbsp;·&nbsp; Category filters below
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- CATEGORY FILTERS -->
+        <section class="filters-section">
+            <div class="container">
+                <div class="filters-header">
+                    <span class="filters-title">Categories</span>
+                    <span class="filters-count"><%= allListings.length %> stays</span>
+                </div>
+                <div class="filters-container" id="filtersContainer">
+                    <div class="filters-scroll" id="filtersScroll" role="list" aria-label="Property categories">
+                        <a href="/listings<%= search ? '?search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= !category ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-grid"></i></span>
+                            <span class="filter-label">All</span>
+                        </a>
+                        <a href="/listings?category=Trending<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Trending' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-fire"></i></span>
+                            <span class="filter-label">Trending</span>
+                        </a>
+                        <a href="/listings?category=Rooms<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Rooms' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-bed"></i></span>
+                            <span class="filter-label">Rooms</span>
+                        </a>
+                        <a href="/listings?category=Iconic Cities<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Iconic Cities' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-mountain-city"></i></span>
+                            <span class="filter-label">Iconic Cities</span>
+                        </a>
+                        <a href="/listings?category=Mountains<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Mountains' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-mountain"></i></span>
+                            <span class="filter-label">Mountains</span>
+                        </a>
+                        <a href="/listings?category=Castels<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Castels' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-brands fa-fort-awesome"></i></span>
+                            <span class="filter-label">Castels</span>
+                        </a>
+                        <a href="/listings?category=Amazing Pools<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Amazing Pools' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-person-swimming"></i></span>
+                            <span class="filter-label">Amazing Pools</span>
+                        </a>
+                        <a href="/listings?category=Camping<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Camping' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-campground"></i></span>
+                            <span class="filter-label">Camping</span>
+                        </a>
+                        <a href="/listings?category=Farms<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Farms' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-cow"></i></span>
+                            <span class="filter-label">Farms</span>
+                        </a>
+                        <a href="/listings?category=Archetic<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Archetic' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-snowflake"></i></span>
+                            <span class="filter-label">Archetic</span>
+                        </a>
+                        <a href="/listings?category=Dome<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Dome' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-landmark-dome"></i></span>
+                            <span class="filter-label">Dome</span>
+                        </a>
+                        <a href="/listings?category=Boats<%= search ? '&search=' + encodeURIComponent(search) : '' %>" 
+                           class="filter-pill <%= category === 'Boats' ? 'active' : '' %>" role="listitem">
+                            <span class="filter-icon"><i class="fa-solid fa-ship"></i></span>
+                            <span class="filter-label">Boats</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Tax Toggle -->
+                <div class="tax-toggle mt-3" style="max-width: fit-content;">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                        <label class="form-check-label" for="switchCheckDefault">Display Total After Taxes</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LISTINGS GRID -->
         <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-3 mt-3">
             <% for(let listing of allListings) { %>
                 <a href="/listings/<%= listing._id %>" class="listing-link">
@@ -211,6 +562,7 @@
         </div>
 
         <script>
+            // Tax toggle
             let taxSwitch = document.getElementById('switchCheckDefault');
             taxSwitch.addEventListener("click", () => {
                 let taxInfo = document.getElementsByClassName("tax-info");
@@ -221,6 +573,68 @@
                         info.style.display = "none";
                     }
                 }
+            });
+
+            // Search input enhancements
+            const searchInput = document.getElementById('searchInput');
+            const searchClear = document.getElementById('searchClear');
+            const searchForm = document.getElementById('searchForm');
+            
+            // Show/hide clear button
+            function toggleClearButton() {
+                if (searchInput.value.length > 0) {
+                    searchClear.classList.add('visible');
+                } else {
+                    searchClear.classList.remove('visible');
+                }
+            }
+            
+            searchInput.addEventListener('input', toggleClearButton);
+            searchInput.addEventListener('focus', toggleClearButton);
+            
+            // Clear button functionality
+            searchClear.addEventListener('click', () => {
+                searchInput.value = '';
+                searchClear.classList.remove('visible');
+                searchInput.focus();
+                // Remove category param when clearing search
+                const url = new URL(window.location);
+                url.searchParams.delete('category');
+                window.history.replaceState({}, '', url);
+            });
+            
+            // Preserve category when searching
+            searchForm.addEventListener('submit', (e) => {
+                const formData = new FormData(searchForm);
+                const searchValue = formData.get('search');
+                if (!searchValue.trim()) {
+                    e.preventDefault();
+                    searchInput.focus();
+                }
+            });
+            
+            // Initialize clear button state
+            toggleClearButton();
+            
+            // Filter scroll fade edges
+            const filtersContainer = document.getElementById('filtersContainer');
+            const filtersScroll = document.getElementById('filtersScroll');
+            
+            function checkScrollFade() {
+                if (filtersScroll.scrollWidth > filtersScroll.clientWidth) {
+                    filtersContainer.classList.remove('no-scroll');
+                } else {
+                    filtersContainer.classList.add('no-scroll');
+                }
+            }
+            
+            // Check on load and resize
+            checkScrollFade();
+            window.addEventListener('resize', checkScrollFade);
+            
+            // Update fade on scroll
+            filtersScroll.addEventListener('scroll', () => {
+                // Could add scroll position indicators here if needed
             });
         </script>
     </body>
